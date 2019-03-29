@@ -7,42 +7,45 @@ local setui = ui.set
 local slider = ui.new_slider
 local multi = ui.new_multiselect
 local hotkey = ui.new_hotkey
+local indicator = renderer.indicator
+local colorpicker = ui.new_color_picker
+local text = renderer.text
+
+local w, h = client.screen_size()
 
 local enableCheckbox = checkbox("AA", "Anti-aimbot angles", "Manual AA")
-local lrHk = hotkey("AA", "Anti-aimbot angles", "Manual AA", true)
-local directionCombobox = combobox("AA", "Anti-aimbot angles", "Direction", "Left", "Right", "Back")
-local bHk = hotkey("AA", "Anti-aimbot angles", "Direction", true)
+local directionCombobox = combobox("AA", "Anti-aimbot angles", "Direction", "Left", "Right", "Back", "Back 2")
 
 local pitchComboboxL = combobox("AA", "Anti-aimbot angles", "Pitch", "Off", "Default", "Up", "Down", "Minimal", "Random")
 local yawbaseComboboxL = combobox("AA", "Anti-aimbot angles", "Yaw base", "Local view", "At targets", "Movement direction")
 local yawComboboxL = combobox("AA", "Anti-aimbot angles", "Yaw", "Off", "180", "Spin", "Static", "180 Z", "Crosshair")
-local yawAngleSliderL = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local yawAngleSliderL = slider("AA", "Anti-aimbot angles", "Yaw angle", -180, 180, 0, true)
 local yawJitterComboboxL = combobox("AA", "Anti-aimbot angles", "Yaw jitter", "Off", "Offset", "Center", "Random")
-local jitterAngleSliderL = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local jitterAngleSliderL = slider("AA", "Anti-aimbot angles", "Yaw jitter angle", -180, 180, 0, true)
 local bodyYawComboboxL = combobox("AA", "Anti-aimbot angles", "Body yaw", "Off", "Opposite", "Jitter", "Static")
-local bodyYawAngleSliderL = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local bodyYawAngleSliderL = slider("AA", "Anti-aimbot angles", "Body yaw angle", -180, 180, 0, true)
 local fakeYawLimitSliderL = slider("AA", "Anti-aimbot angles", "Fake yaw limit", 0, 60, 60, true)
 local freestandingMultiL = multi("AA", "Anti-aimbot angles", "Freestanding", "Default", "Edge")
 
 local pitchComboboxR = combobox("AA", "Anti-aimbot angles", "Pitch", "Off", "Default", "Up", "Down", "Minimal", "Random")
 local yawbaseComboboxR = combobox("AA", "Anti-aimbot angles", "Yaw base", "Local view", "At targets", "Movement direction")
 local yawComboboxR = combobox("AA", "Anti-aimbot angles", "Yaw", "Off", "180", "Spin", "Static", "180 Z", "Crosshair")
-local yawAngleSliderR = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local yawAngleSliderR = slider("AA", "Anti-aimbot angles", "Yaw angle", -180, 180, 0, true)
 local yawJitterComboboxR = combobox("AA", "Anti-aimbot angles", "Yaw jitter", "Off", "Offset", "Center", "Random")
-local jitterAngleSliderR = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local jitterAngleSliderR = slider("AA", "Anti-aimbot angles", "Yaw jitter angle", -180, 180, 0, true)
 local bodyYawComboboxR = combobox("AA", "Anti-aimbot angles", "Body yaw", "Off", "Opposite", "Jitter", "Static")
-local bodyYawAngleSliderR = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local bodyYawAngleSliderR = slider("AA", "Anti-aimbot angles", "Body yaw angle", -180, 180, 0, true)
 local fakeYawLimitSliderR = slider("AA", "Anti-aimbot angles", "Fake yaw limit", 0, 60, 60, true)
 local freestandingMultiR = multi("AA", "Anti-aimbot angles", "Freestanding", "Default", "Edge")
 
 local pitchComboboxB = combobox("AA", "Anti-aimbot angles", "Pitch", "Off", "Default", "Up", "Down", "Minimal", "Random")
 local yawbaseComboboxB = combobox("AA", "Anti-aimbot angles", "Yaw base", "Local view", "At targets", "Movement direction")
 local yawComboboxB = combobox("AA", "Anti-aimbot angles", "Yaw", "Off", "180", "Spin", "Static", "180 Z", "Crosshair")
-local yawAngleSliderB = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local yawAngleSliderB = slider("AA", "Anti-aimbot angles", "Yaw angle", -180, 180, 0, true)
 local yawJitterComboboxB = combobox("AA", "Anti-aimbot angles", "Yaw jitter", "Off", "Offset", "Center", "Random")
-local jitterAngleSliderB = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local jitterAngleSliderB = slider("AA", "Anti-aimbot angles", "Yaw jitter angle", -180, 180, 0, true)
 local bodyYawComboboxB = combobox("AA", "Anti-aimbot angles", "Body yaw", "Off", "Opposite", "Jitter", "Static")
-local bodyYawAngleSliderB = slider("AA", "Anti-aimbot angles", " ", -180, 180, 0, true)
+local bodyYawAngleSliderB = slider("AA", "Anti-aimbot angles", "Body yaw angle", -180, 180, 0, true)
 local fakeYawLimitSliderB = slider("AA", "Anti-aimbot angles", "Fake yaw limit", 0, 60, 60, true)
 local freestandingMultiB = multi("AA", "Anti-aimbot angles", "Freestanding", "Default", "Edge")
 
@@ -53,6 +56,12 @@ local yawJitter, yawJitterAngle = reference("AA", "Anti-aimbot angles", "Yaw jit
 local bodyYaw, bodyYawAngle = reference("AA", "Anti-aimbot angles", "Body yaw")
 local fakeYawLimit = reference("AA", "Anti-aimbot angles", "Fake yaw limit")
 local freestanding = reference("AA", "Anti-aimbot angles", "Freestanding")
+
+local indicatorCombobox = combobox("AA", "Anti-aimbot angles", "Indicator type", "Off", "Indicator", "Text", "Crosshair text", "Crosshair icon")
+local indicatorColor = colorpicker("AA", "Anti-aimbot angles", "Indicator type", 255, 255, 255, 255)
+
+local lrHk = hotkey("AA", "Anti-aimbot angles", "Left / right", false)
+local bHk = hotkey("AA", "Anti-aimbot angles", "Back", false)
 
 local function on_paint(ctx)
 	if getui(enableCheckbox, true) then
@@ -66,6 +75,10 @@ local function on_paint(ctx)
 		visibility(bodyYaw, false)
 		visibility(bodyYawAngle, false)
 		visibility(fakeYawLimit, false)
+		visibility(freestanding, false)
+
+		visibility(indicatorCombobox, true)
+		visibility(indicatorColor, true)
 
 		if getui(directionCombobox) == "Left" then
 			visibility(pitchComboboxL, true)
@@ -105,6 +118,21 @@ local function on_paint(ctx)
 			if getui(bodyYawComboboxL) == "Off" then
 				visibility(bodyYawAngleSliderL, false)
 				visibility(fakeYawLimitSliderL, false)
+			end
+
+			local r, g, b, a = getui(indicatorColor)
+
+			if getui(indicatorCombobox) == "Off" then
+
+			elseif getui(indicatorCombobox) == "Indicator" then
+				indicator(r, g, b, a, "Left")
+			elseif getui(indicatorCombobox) == "Text" then
+				text(5, h / 2, 255, 255, 255, 255, "", 0, "Anti-aimbot direction:")
+				text(120, h / 2, r, g, b, a, "", 0, "Left")
+			elseif getui(indicatorCombobox) == "Crosshair text" then
+				text(w / 2, h / 2 + 17, r, g, b, a, "c", 0, "Left")
+			elseif getui(indicatorCombobox) == "Crosshair icon" then
+				text(w / 2 - 20, h / 2 - 3, r, g, b, a, "c+", 0, "⯇")
 			end
 		else
 			visibility(pitchComboboxL, false)
@@ -158,6 +186,21 @@ local function on_paint(ctx)
 				visibility(bodyYawAngleSliderR, false)
 				visibility(fakeYawLimitSliderR, false)
 			end
+
+			local r, g, b, a = getui(indicatorColor)
+
+			if getui(indicatorCombobox) == "Off" then
+
+			elseif getui(indicatorCombobox) == "Indicator" then
+				indicator(r, g, b, a, "Right")
+			elseif getui(indicatorCombobox) == "Text" then
+				text(5, h / 2, 255, 255, 255, 255, "", 0, "Anti-aimbot direction:")
+				text(120, h / 2, r, g, b, a, "", 0, "Right")
+			elseif getui(indicatorCombobox) == "Crosshair text" then
+				text(w / 2, h / 2 + 17, r, g, b, a, "c", 0, "Right")
+			elseif getui(indicatorCombobox) == "Crosshair icon" then
+				text(w / 2 + 20, h / 2 - 3, r, g, b, a, "c+", 0, "⯈")
+			end
 		else
 			visibility(pitchComboboxR, false)
 			visibility(yawbaseComboboxR, false)
@@ -210,6 +253,21 @@ local function on_paint(ctx)
 				visibility(bodyYawAngleSliderB, false)
 				visibility(fakeYawLimitSliderB, false)
 			end
+
+			local r, g, b, a = getui(indicatorColor)
+
+			if getui(indicatorCombobox) == "Off" then
+
+			elseif getui(indicatorCombobox) == "Indicator" then
+				indicator(r, g, b, a, "Back")
+			elseif getui(indicatorCombobox) == "Text" then
+				text(5, h / 2, 255, 255, 255, 255, "", 0, "Anti-aimbot direction:")
+				text(120, h / 2, r, g, b, a, "", 0, "Back")
+			elseif getui(indicatorCombobox) == "Crosshair text" then
+				text(w / 2, h / 2 + 17, r, g, b, a, "c", 0, "Back")
+			elseif getui(indicatorCombobox) == "Crosshair icon" then
+				text(w / 2, h / 2 + 20, r, g, b, a, "c+", 0, "⯆")
+			end
 		else
 			visibility(pitchComboboxB, false)
 			visibility(yawbaseComboboxB, false)
@@ -243,6 +301,10 @@ local function on_paint(ctx)
 		visibility(bodyYaw, true)
 		visibility(bodyYawAngle, true)
 		visibility(fakeYawLimit, true)
+		visibility(freestanding, true)
+
+		visibility(indicatorCombobox, false)
+		visibility(indicatorColor, false)
 
 		visibility(pitchComboboxL, false)
 		visibility(yawbaseComboboxL, false)
