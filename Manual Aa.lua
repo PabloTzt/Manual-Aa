@@ -14,7 +14,7 @@ local text = renderer.text
 local w, h = client.screen_size()
 
 local enableCheckbox = checkbox("AA", "Anti-aimbot angles", "Manual AA")
-local directionCombobox = combobox("AA", "Anti-aimbot angles", "Direction", "Left", "Right", "Back", "Back 2")
+local directionCombobox = combobox("AA", "Anti-aimbot angles", "Direction", "Left", "Right", "Back")
 
 local pitchComboboxL = combobox("AA", "Anti-aimbot angles", "Pitch", "Off", "Default", "Up", "Down", "Minimal", "Random")
 local yawbaseComboboxL = combobox("AA", "Anti-aimbot angles", "Yaw base", "Local view", "At targets", "Movement direction")
